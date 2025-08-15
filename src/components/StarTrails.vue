@@ -1,13 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
+
+interface Star {
+  x: number
+  y: number
+  size: number
+  color: string
+}
 
 onMounted(() => {
   // 创建两个 canvas 元素，show 用于显示，help 作为辅助
   const help = document.createElement('canvas')
-  const show = document.getElementById('trails')
+  const show = document.getElementById('trails') as HTMLCanvasElement
+
+  if (!show)
+    return
 
   // 声明两个变量 showWidth 和 showHeight，用于存储显示区域的宽度和高度
-  let showWidth, showHeight
+  let showWidth: number, showHeight: number
 
   // 让两个 canvas 的宽高与显示区域的宽高一致
   show.width = help.width = showWidth = show.offsetWidth
@@ -22,12 +32,15 @@ onMounted(() => {
   const showContext = show.getContext('2d')
   const helpContext = help.getContext('2d')
 
+  if (!showContext || !helpContext)
+    return
+
   // 设置显示区域背景色
   showContext.fillStyle = 'rgba(0,0,0,1)'
   showContext.fillRect(0, 0, showWidth, showHeight)
 
   // 创建随机颜色随机位置的星星
-  function rand(Min, Max) {
+  function rand(Min: number, Max: number) {
     return Min + Math.round(Math.random() * (Max - Min))
   }
 
@@ -41,10 +54,10 @@ onMounted(() => {
   }
 
   // 星星数组
-  const stars = []
+  const stars: Star[] = []
 
   // 创建每个星星的属性
-  function createStar() {
+  function createStar(): Star {
     return {
       x: rand(-help.width, help.width),
       y: rand(-help.height, help.height),
@@ -58,11 +71,11 @@ onMounted(() => {
     let count = stars.length
     while (count--) {
       const star = stars[count]
-      helpContext.beginPath()
-      helpContext.arc(star.x, star.y, star.size, 0, Math.PI * 2, true)
-      helpContext.fillStyle = star.color
-      helpContext.closePath()
-      helpContext.fill()
+      helpContext!.beginPath()
+      helpContext!.arc(star.x, star.y, star.size, 0, Math.PI * 2, true)
+      helpContext!.fillStyle = star.color
+      helpContext!.closePath()
+      helpContext!.fill()
     }
   }
 
@@ -71,16 +84,16 @@ onMounted(() => {
   // 循环
   function loop() {
     // 开始绘制
-    showContext.drawImage(help, -help.width / 2, -help.height / 2)
+    showContext!.drawImage(help, -help.width / 2, -help.height / 2)
 
     drawTimes++
 
     if (drawTimes > 200 && drawTimes % 8 === 0) {
-      showContext.fillStyle = 'rgba(0,0,0,.04)'
-      showContext.fillRect(-(longSide * 3), -(longSide * 3), longSide * 6, longSide * 6)
+      showContext!.fillStyle = 'rgba(0,0,0,.04)'
+      showContext!.fillRect(-(longSide * 3), -(longSide * 3), longSide * 6, longSide * 6)
     }
     // 旋转
-    showContext.rotate(0.025 * Math.PI / 180)
+    showContext!.rotate(0.025 * Math.PI / 180)
   }
 
   let count = 18000
@@ -105,6 +118,8 @@ onMounted(() => {
 
   // 监听浏览器窗口变化，变化则重新执行animate函数
   window.addEventListener('resize', () => {
+    if (!show)
+      return
     showWidth = show.offsetWidth
     showHeight = show.offsetHeight
     show.width = showWidth

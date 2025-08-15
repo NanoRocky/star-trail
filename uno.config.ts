@@ -1,12 +1,13 @@
+import presetWind3 from '@unocss/preset-wind3'
 // uno.config.ts
-import { defineConfig, presetAttributify, presetIcons, presetMini, presetTypography, presetUno } from 'unocss'
+import { defineConfig, presetAttributify, presetIcons, presetMini, presetTypography } from 'unocss'
 
 export default defineConfig({
   presets: [
     // mini
     presetMini(),
     // 默认预设
-    presetUno(),
+    presetWind3(),
     // 图标
     presetIcons(),
     // 属性化
