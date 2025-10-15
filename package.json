@@ -16,7 +16,7 @@
   "dependencies": {
     "@types/node-fetch": "^2.6.13",
     "@unocss/preset-wind": "^66.4.2",
-    "@unocss/preset-wind3": "^66.4.2",
+    "@unocss/preset-wind3": "^66.5.2",
     "autoprefixer": "^10.4.21",
     "axios": "^1.11.0",
     "cssnano": "^7.1.0",
